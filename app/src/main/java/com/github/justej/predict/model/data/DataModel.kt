@@ -3,8 +3,8 @@ package com.github.justej.predict.model.data
 import android.os.Parcel
 import android.os.Parcelable
 
-data class WordCard(val id: Int,
-                    val catchWord: List<String>,
+data class WordCard(val catchWordSpellings: List<String>,
+                    val homonymId: String?,
                     val transcription: String,
                     val translation: List<String>,
                     val notes: String,
@@ -13,8 +13,8 @@ data class WordCard(val id: Int,
                     val audio: List<ByteArray>,
                     val pictures: List<ByteArray>) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readInt(),
             parcel.createStringArrayList(),
+            parcel.readString(),
             parcel.readString(),
             parcel.createStringArrayList(),
             parcel.readString(),
@@ -24,8 +24,8 @@ data class WordCard(val id: Int,
             readListOf<ByteArray>(parcel))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeStringList(catchWord)
+        parcel.writeString(homonymId)
+        parcel.writeStringList(catchWordSpellings)
         parcel.writeString(transcription)
         parcel.writeStringList(translation)
         parcel.writeString(notes)
@@ -38,8 +38,8 @@ data class WordCard(val id: Int,
     }
 
     companion object CREATOR : Parcelable.Creator<WordCard> {
-        val EMPTY = WordCard(-1,
-                emptyList(),
+        val EMPTY = WordCard(emptyList(),
+                null,
                 "",
                 emptyList(),
                 "",

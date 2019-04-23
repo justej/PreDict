@@ -4,12 +4,11 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
-import android.widget.TextView
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.WORD_CARD
 import com.github.justej.predict.model.data.WordCard
+import kotlinx.android.synthetic.main.activity_new_card.*
 import java.util.stream.Collectors
 
 /**
@@ -25,7 +24,8 @@ import java.util.stream.Collectors
  * - links to related words
  */
 class NewCardActivity : AppCompatActivity() {
-    private val presenter: NewCardPresenter = NewCardPresenter(this)
+
+    private val presenter = NewCardPresenter(this)
     private var wordCard = WordCard.EMPTY
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,18 +38,18 @@ class NewCardActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        wordCard = WordCard(wordCard.id,
-                findViewById<TextView>(R.id.catchWordEdit).text.split("\n"),
-                findViewById<TextView>(R.id.transcriptionEdit).text.toString(),
-                findViewById<TextView>(R.id.translationEdit).text.split("\n"),
-                findViewById<TextView>(R.id.notesEdit).text.toString(),
-                findViewById<TextView>(R.id.tagsEdit).text.split("\n"),
-                findViewById<TextView>(R.id.examplesEdit).text.toString(),
-                findViewById<TextView>(R.id.audioEdit).text.split("\n").stream()
+        wordCard = WordCard(catchWordEdit.text.split("\n"),
+                wordCard.homonymId,
+                transcriptionEdit.text.toString(),
+                translationEdit.text.split("\n"),
+                notesEdit.text.toString(),
+                tagsEdit.text.split("\n"),
+                examplesEdit.text.toString(),
+                audioEdit.text.split("\n").stream()
                         .filter { it != null && it.isEmpty() }
                         .map { it.toByteArray() }
                         .collect(Collectors.toList()),
-                findViewById<TextView>(R.id.picturesEdit).text.split("\n").stream()
+                picturesEdit.text.split("\n").stream()
                         .filter { it != null && it.isEmpty() }
                         .map { it.toByteArray() }
                         .collect(Collectors.toList()))

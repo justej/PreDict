@@ -9,17 +9,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-        <activity android:name=".activities.NewCardActivity" />
+
         <activity
-            android:name=".activities.SplashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:noHistory="true">
+            android:name=".activities.WordsActivity"
+            android:label="@string/title_activity_words"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!--<meta-data-->
+            <!--android:name="android.app.default_searchable"-->
+            <!--android:value=".activities.NewCardActivity" />-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name=".activities.NewCardActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <!--<meta-data-->
+                <!--android:name="android.app.searchable"-->
+                <!--android:resource="@xml/searchable" />-->
+        </activity>
+
+        <activity
+            android:name=".activities.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:noHistory="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+
     </application>
 
 </manifest>

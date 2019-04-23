@@ -9,18 +9,19 @@ import com.github.justej.predict.model.data.WordCard
 import com.github.justej.predict.utils.joinByteArrays
 import com.github.justej.predict.utils.joinLines
 import com.github.justej.predict.utils.updateEditable
+import kotlinx.android.synthetic.main.activity_new_card.*
 
 class NewCardPresenter(private val ui: Activity) {
 
     fun showWordCard(wordCard: WordCard) {
         // Mandatory fields
-        if (wordCard.catchWord.isNotEmpty()) {
-            val catchWord = ui.findViewById<EditText>(R.id.catchWordEdit)
-            updateEditable(catchWord.text, joinLines(wordCard.catchWord))
+        if (wordCard.catchWordSpellings.isNotEmpty()) {
+            val catchWord = ui.catchWordEdit
+            updateEditable(catchWord.text, joinLines(wordCard.catchWordSpellings))
         }
 
         if (wordCard.translation.isNotEmpty()) {
-            val translation = ui.findViewById<EditText>(R.id.translationEdit)
+            val translation = ui.translationEdit
             updateEditable(translation.text, joinLines(wordCard.translation))
         }
 

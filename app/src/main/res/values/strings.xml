@@ -10,6 +10,7 @@
     <string name="hint_examples">Examples</string>
     <string name="hint_audio">Audio</string>
     <string name="hint_pictures">Pictures</string>
+    <string name="hint_search">Search word</string>
     <!-- label texts -->
     <string name="label_text_add_transcription">Add transcription</string>
     <string name="label_text_add_notes">Add notes</string>
@@ -17,4 +18,12 @@
     <string name="label_text_add_examples">Add examples</string>
     <string name="label_text_add_audio">Add audio</string>
     <string name="label_text_add_pictures">Add pictures</string>
+
+    <string name="title_activity_words">Words</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="tag_symbol">#</string>
 </resources>
