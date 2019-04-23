@@ -80,6 +80,7 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         searchView.apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
                 var searchQuery: String? = null
 
                 override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -92,7 +93,7 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                     }
 
                     val isHashed = updatedQuery.startsWith(TAG_SYMBOL)
-                    val wasHashed = searchQuery != null && searchQuery!!.startsWith(TAG_SYMBOL)
+                    val wasHashed = searchQuery?.startsWith(TAG_SYMBOL) ?: false
                     if (isHashed != wasHashed) {
                         tagButton.isChecked = isHashed
                     }
@@ -133,13 +134,13 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.search_menu_item -> true
+            R.id.search_menu_item -> true // TODO: replace the placeholder
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
+        // TODO: Handle navigation view item clicks
         when (item.itemId) {
             R.id.nav_camera -> {
                 // Handle the camera action

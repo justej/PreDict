@@ -70,27 +70,27 @@ class NewCardActivity : AppCompatActivity() {
     }
 
     fun expandTranscription(view: View) {
-        presenter.expand(R.id.transcriptionLabel, R.id.transcriptionEdit)?.requestFocus()
+        presenter.expand(transcriptionLabel, transcriptionEdit).requestFocus()
     }
 
     fun expandNotes(view: View) {
-        presenter.expand(R.id.notesLabel, R.id.notesEdit)?.requestFocus()
+        presenter.expand(notesLabel, notesEdit).requestFocus()
     }
 
     fun expandTags(view: View) {
-        presenter.expand(R.id.tagsLabel, R.id.tagsEdit)?.requestFocus()
+        presenter.expand(tagsLabel, tagsEdit).requestFocus()
     }
 
     fun expandExamples(view: View) {
-        presenter.expand(R.id.examplesLabel, R.id.examplesEdit)?.requestFocus()
+        presenter.expand(examplesLabel, examplesEdit).requestFocus()
     }
 
     fun expandAudio(view: View) {
-        presenter.expand(R.id.audioLabel, R.id.audioEdit)?.requestFocus()
+        presenter.expand(audioLabel, audioEdit).requestFocus()
     }
 
     fun expandPictures(view: View) {
-        presenter.expand(R.id.picturesLabel, R.id.picturesEdit)?.requestFocus()
+        presenter.expand(picturesLabel, picturesEdit).requestFocus()
     }
 
     //TODO: add "save" and "discard" buttons

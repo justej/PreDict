@@ -45,16 +45,10 @@ class NewCardPresenter(private val ui: Activity) {
         }
     }
 
-    internal fun expand(labelId: Int, editId: Int): View? {
-        val label = ui.findViewById<TextView>(labelId)
-        val edit = ui.findViewById<EditText>(editId)
-        expand(label, edit)
-        return edit
-    }
-
-    private fun expand(label: TextView, edit: TextView) {
+    internal fun expand(label: TextView, edit: TextView): View {
         label.visibility = View.GONE
         edit.visibility = View.VISIBLE
+        return edit
     }
 
     private fun collapse(label: TextView, edit: TextView) {
