@@ -2,9 +2,10 @@
     <string name="app_name">PreDict</string>
     <string name="producer">by Alexoft</string>
     <!-- hints -->
+    <string name="hint_homonym_id">Word to distinct homonyms</string>
     <string name="hint_catchword">Word (one spell variant per line)</string>
     <string name="hint_transcription">Transcription (one variant per line)</string>
-    <string name="hint_notes">Notes</string>
+    <string name="hint_notes">Notes to word, translation, usage etc.</string>
     <string name="hint_translation">Translation</string>
     <string name="hint_tags">Tags (one tag per line)</string>
     <string name="hint_examples">Examples</string>
@@ -12,6 +13,7 @@
     <string name="hint_pictures">Pictures</string>
     <string name="hint_search">Search word</string>
     <!-- label texts -->
+    <string name="label_text_add_homonym_id">Add homonym identifier</string>
     <string name="label_text_add_transcription">Add transcription</string>
     <string name="label_text_add_notes">Add notes</string>
     <string name="label_text_add_tags">Add tags</string>

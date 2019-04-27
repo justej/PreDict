@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class WordCard(val catchWordSpellings: List<String>,
-                    val homonymId: String?,
+                    val homonymId: String,
                     val transcription: String,
                     val translation: List<String>,
                     val notes: String,
@@ -13,13 +13,13 @@ data class WordCard(val catchWordSpellings: List<String>,
                     val audio: List<ByteArray>,
                     val pictures: List<ByteArray>) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.createStringArrayList(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.createStringArrayList(),
-            parcel.readString(),
-            parcel.createStringArrayList(),
-            parcel.readString(),
+            parcel.createStringArrayList() ?: listOf(),
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.createStringArrayList() ?: listOf(),
+            parcel.readString() ?: "",
+            parcel.createStringArrayList() ?: listOf(),
+            parcel.readString() ?: "",
             readListOf<ByteArray>(parcel),
             readListOf<ByteArray>(parcel))
 
@@ -38,8 +38,9 @@ data class WordCard(val catchWordSpellings: List<String>,
     }
 
     companion object CREATOR : Parcelable.Creator<WordCard> {
+
         val EMPTY = WordCard(emptyList(),
-                null,
+                "",
                 "",
                 emptyList(),
                 "",
@@ -61,5 +62,7 @@ data class WordCard(val catchWordSpellings: List<String>,
         override fun newArray(size: Int): Array<WordCard?> {
             return arrayOfNulls(size)
         }
+
     }
+
 }

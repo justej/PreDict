@@ -8,20 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ui_translation_label">
+    <style name="ui_translation_label" parent="AppTheme">
         <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginStart">0dp</item>
         <item name="android:layout_marginEnd">0dp</item>
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:layout_marginRight">0dp</item>
 
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
 
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="ui_width_0dp_height_wrap_content">
+    <style name="ui_height_0dp_weight_match_parent" parent="AppTheme">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
@@ -30,25 +30,30 @@
 
         <item name="android:textSize">20sp</item>
 
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">match_parent</item>
     </style>
 
-    <style name="ui_editable" parent="ui_width_0dp_height_wrap_content">
+    <style name="ui_editable" parent="ui_height_0dp_weight_match_parent">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:editable">true</item>
     </style>
 
-    <style name="ui_label" parent="ui_width_0dp_height_wrap_content">
+    <style name="ui_label" parent="ui_height_0dp_weight_match_parent">
         <item name="android:editable">false</item>
         <item name="android:clickable">false</item>
     </style>
 
-    <style name="ui_multiline_label" parent="ui_label">
+    <style name="ui_label.Clickable">
+        <item name="android:editable">false</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ui_label.Multiline">
         <item name="android:state_multiline">true</item>
     </style>
 
-    <style name="ui_link" parent="ui_label">
+    <style name="ui_link" parent="ui_label.Clickable">
         <item name="android:textColor">@color/ui_link</item>
     </style>
     <!-- end -->
