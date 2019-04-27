@@ -14,7 +14,7 @@ import android.widget.ToggleButton
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.TAG_SYMBOL
 import kotlinx.android.synthetic.main.activity_navigation.*
-import kotlinx.android.synthetic.main.app_bar_navigation.*
+import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.content_navigation.*
 import kotlinx.android.synthetic.main.words_item.view.*
 

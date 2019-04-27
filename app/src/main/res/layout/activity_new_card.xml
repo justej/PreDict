@@ -1,160 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.NewCardActivity">
+    android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <include layout="@layout/app_bar" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:context=".activities.NewCardActivity">
 
-        <TextView
-            android:id="@+id/homonymIdLabel"
-            style="@style/ui_link"
-            android:onClick="expandHomonymId"
-            android:text="@string/label_text_add_homonym_id"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".activities.NewCardActivity">
 
-        <EditText
-            android:id="@+id/homonymIdEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_homonym_id"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homonymIdLabel" />
+            <TextView
+                android:id="@+id/homonymIdLabel"
+                style="@style/ui_link"
+                android:onClick="expandHomonymId"
+                android:text="@string/label_text_add_homonym_id"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/catchWordEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_catchword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homonymIdEdit" />
+            <EditText
+                android:id="@+id/homonymIdEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_homonym_id"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homonymIdLabel" />
 
-        <TextView
-            android:id="@+id/transcriptionLabel"
-            style="@style/ui_link"
-            android:onClick="expandTranscription"
-            android:text="@string/label_text_add_transcription"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/catchWordEdit" />
+            <EditText
+                android:id="@+id/catchWordEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_catchword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homonymIdEdit" />
 
-        <EditText
-            android:id="@+id/transcriptionEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_transcription"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/transcriptionLabel" />
+            <TextView
+                android:id="@+id/transcriptionLabel"
+                style="@style/ui_link"
+                android:onClick="expandTranscription"
+                android:text="@string/label_text_add_transcription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/catchWordEdit" />
 
-        <EditText
-            android:id="@+id/translationEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_translation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/transcriptionEdit" />
+            <EditText
+                android:id="@+id/transcriptionEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_transcription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transcriptionLabel" />
 
-        <TextView
-            android:id="@+id/notesLabel"
-            style="@style/ui_link"
-            android:onClick="expandNotes"
-            android:text="@string/label_text_add_notes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/translationEdit" />
+            <EditText
+                android:id="@+id/translationEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_translation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transcriptionEdit" />
 
-        <EditText
-            android:id="@+id/notesEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_notes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notesLabel" />
+            <TextView
+                android:id="@+id/notesLabel"
+                style="@style/ui_link"
+                android:onClick="expandNotes"
+                android:text="@string/label_text_add_notes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/translationEdit" />
 
-        <TextView
-            android:id="@+id/tagsLabel"
-            style="@style/ui_link"
-            android:onClick="expandTags"
-            android:text="@string/label_text_add_tags"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notesEdit" />
+            <EditText
+                android:id="@+id/notesEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_notes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notesLabel" />
 
-        <EditText
-            android:id="@+id/tagsEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_tags"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagsLabel" />
+            <TextView
+                android:id="@+id/tagsLabel"
+                style="@style/ui_link"
+                android:onClick="expandTags"
+                android:text="@string/label_text_add_tags"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notesEdit" />
 
-        <TextView
-            android:id="@+id/examplesLabel"
-            style="@style/ui_link"
-            android:onClick="expandExamples"
-            android:text="@string/label_text_add_examples"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagsEdit" />
+            <EditText
+                android:id="@+id/tagsEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_tags"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tagsLabel" />
 
-        <EditText
-            android:id="@+id/examplesEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_examples"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/examplesLabel" />
+            <TextView
+                android:id="@+id/examplesLabel"
+                style="@style/ui_link"
+                android:onClick="expandExamples"
+                android:text="@string/label_text_add_examples"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tagsEdit" />
 
-        <TextView
-            android:id="@+id/audioLabel"
-            style="@style/ui_link"
-            android:onClick="expandAudio"
-            android:text="@string/label_text_add_audio"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/examplesEdit" />
+            <EditText
+                android:id="@+id/examplesEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_examples"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/examplesLabel" />
 
-        <EditText
-            android:id="@+id/audioEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_audio"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/audioLabel" />
+            <TextView
+                android:id="@+id/audioLabel"
+                style="@style/ui_link"
+                android:onClick="expandAudio"
+                android:text="@string/label_text_add_audio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/examplesEdit" />
 
-        <TextView
-            android:id="@+id/picturesLabel"
-            style="@style/ui_link"
-            android:onClick="expandPictures"
-            android:text="@string/label_text_add_pictures"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/audioEdit" />
+            <EditText
+                android:id="@+id/audioEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_audio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audioLabel" />
 
-        <EditText
-            android:id="@+id/picturesEdit"
-            style="@style/ui_editable"
-            android:autofillHints="no"
-            android:hint="@string/hint_pictures"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/picturesLabel" />
+            <TextView
+                android:id="@+id/picturesLabel"
+                style="@style/ui_link"
+                android:onClick="expandPictures"
+                android:text="@string/label_text_add_pictures"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audioEdit" />
 
-    </android.support.constraint.ConstraintLayout>
+            <EditText
+                android:id="@+id/picturesEdit"
+                style="@style/ui_editable"
+                android:autofillHints="no"
+                android:hint="@string/hint_pictures"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/picturesLabel" />
 
-</ScrollView>
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -4,6 +4,8 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -15,6 +17,7 @@ import com.github.justej.predict.utils.joinByteArrays
 import com.github.justej.predict.utils.joinLines
 import com.github.justej.predict.utils.updateEditable
 import kotlinx.android.synthetic.main.activity_new_card.*
+import kotlinx.android.synthetic.main.app_bar.*
 import java.util.stream.Collectors
 
 /**
@@ -39,6 +42,9 @@ class NewCardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_card)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_check)
 
         showWordCard(WordCard.EMPTY)
         val word = intent?.extras?.getString(PARAM_WORD, "")
@@ -47,15 +53,7 @@ class NewCardActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        val wordCard = WordCard(catchWordEdit.text.split("\n"),
-                homonymIdEdit.text.toString(),
-                transcriptionEdit.text.toString(),
-                translationEdit.text.split("\n"),
-                notesEdit.text.toString(),
-                tagsEdit.text.split("\n"),
-                examplesEdit.text.toString(),
-                toListOfByteArray(audioEdit.text),
-                toListOfByteArray(picturesEdit.text))
+        val wordCard = populateWordCard()
 
         outState?.putParcelable(PARAM_WORD_CARD, wordCard)
     }
@@ -65,6 +63,29 @@ class NewCardActivity : AppCompatActivity() {
 
         val wordCard = (savedInstanceState?.get(PARAM_WORD_CARD) ?: WordCard.EMPTY) as WordCard
         showWordCard(wordCard)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.new_card_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                presenter.saveWordCard(populateWordCard())
+                finish()
+                true
+            }
+
+            R.id.discard -> {
+                finish()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     //endregion
@@ -138,6 +159,18 @@ class NewCardActivity : AppCompatActivity() {
         label.visibility = View.GONE
         edit.visibility = View.VISIBLE
         return edit
+    }
+
+    private fun populateWordCard(): WordCard {
+        return WordCard(catchWordEdit.text.split("\n"),
+                homonymIdEdit.text.toString(),
+                transcriptionEdit.text.toString(),
+                translationEdit.text.split("\n"),
+                notesEdit.text.toString(),
+                tagsEdit.text.split("\n"),
+                examplesEdit.text.toString(),
+                toListOfByteArray(audioEdit.text),
+                toListOfByteArray(picturesEdit.text))
     }
 
     private fun collapseEditTextToLabel(label: TextView, edit: TextView) {

@@ -14,9 +14,6 @@
             android:name=".activities.WordsActivity"
             android:label="@string/title_activity_words"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<meta-data-->
-            <!--android:name="android.app.default_searchable"-->
-            <!--android:value=".activities.NewCardActivity" />-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,15 +23,9 @@
 
         <activity
             android:name=".activities.NewCardActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <!--<meta-data-->
-                <!--android:name="android.app.searchable"-->
-                <!--android:resource="@xml/searchable" />-->
-        </activity>
+            android:label="@string/title_activity_add_word"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".activities.SplashActivity"
