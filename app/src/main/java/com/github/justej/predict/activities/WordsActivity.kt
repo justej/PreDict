@@ -72,22 +72,25 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // TODO: Handle navigation view item clicks
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_words -> {
             }
-            R.id.nav_gallery -> {
 
+            R.id.nav_verbs -> {
             }
-            R.id.nav_slideshow -> {
 
+            R.id.nav_texts -> {
             }
-            R.id.nav_manage -> {
 
+            R.id.nav_statistics -> {
             }
+
+            R.id.nav_settings -> {
+            }
+
             R.id.nav_share -> {
-
             }
-            R.id.nav_send -> {
+
+            R.id.nav_export -> {
 
             }
         }
