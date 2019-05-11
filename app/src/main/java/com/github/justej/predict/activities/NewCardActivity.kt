@@ -2,7 +2,7 @@ package com.github.justej.predict.activities
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem

@@ -3,7 +3,7 @@ package com.github.justej.predict.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.SPLASH_SCREEN_DURATION
