@@ -7,21 +7,9 @@ fun updateEditable(editable: Editable, newText: CharSequence) {
 }
 
 fun joinLines(strings: Iterable<String>): String {
-    return strings.joinToString(separator="\n")
+    return strings.joinToString(separator = "\n")
 }
 
-fun joinByteArrays(barrays: Iterable<ByteArray>): String {
-    val sbuilder = StringBuilder()
-    var audioNumber = 1
-
-    for (barray in barrays) {
-        sbuilder.append("binary item #").append(audioNumber).append("\n")
-        audioNumber++
-    }
-
-    if (sbuilder.endsWith("\n")) {
-        sbuilder.removeSuffix("\n")
-    }
-
-    return sbuilder.toString()
+fun <T> joinResources(resource: Iterable<T>): String {
+    return resource.joinToString { resource.toString() }
 }

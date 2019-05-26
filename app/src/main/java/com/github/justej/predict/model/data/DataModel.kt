@@ -3,31 +3,32 @@ package com.github.justej.predict.model.data
 import android.os.Parcel
 import android.os.Parcelable
 
-data class WordCard(val catchWordSpellings: List<String>,
-                    val homonymId: String,
-                    val transcription: String,
-                    val translation: List<String>,
-                    val notes: String,
-                    val tags: List<String>,
-                    val examples: String,
-                    val audio: List<ByteArray>,
-                    val pictures: List<ByteArray>) : Parcelable {
+data class WordCard(
+        val catchWordSpellings: String,
+        val homonymDiscriminator: String,
+        val transcription: String,
+        val translation: String,
+        val notes: String,
+        val tags: List<String>,
+        val examples: String,
+        val audio: List<Audio>,
+        val pictures: List<Picture>) : Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
             parcel.createStringArrayList() ?: listOf(),
             parcel.readString() ?: "",
-            parcel.readString() ?: "",
-            parcel.createStringArrayList() ?: listOf(),
-            parcel.readString() ?: "",
-            parcel.createStringArrayList() ?: listOf(),
-            parcel.readString() ?: "",
-            readListOf<ByteArray>(parcel),
-            readListOf<ByteArray>(parcel))
+            readListOf<Audio>(parcel),
+            readListOf<Picture>(parcel))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(homonymId)
-        parcel.writeStringList(catchWordSpellings)
+        parcel.writeString(homonymDiscriminator)
+        parcel.writeString(catchWordSpellings)
         parcel.writeString(transcription)
-        parcel.writeStringList(translation)
+        parcel.writeString(translation)
         parcel.writeString(notes)
         parcel.writeStringList(tags)
         parcel.writeString(examples)
@@ -39,10 +40,10 @@ data class WordCard(val catchWordSpellings: List<String>,
 
     companion object CREATOR : Parcelable.Creator<WordCard> {
 
-        val EMPTY = WordCard(emptyList(),
+        val EMPTY = WordCard("",
                 "",
                 "",
-                emptyList(),
+                "",
                 "",
                 emptyList(),
                 "",
@@ -63,6 +64,30 @@ data class WordCard(val catchWordSpellings: List<String>,
             return arrayOfNulls(size)
         }
 
+    }
+
+}
+
+
+class Picture(private val id: Int,
+              private val value: ByteArray) {
+
+    fun id() = id
+    fun value() = value
+    override fun toString(): String {
+        return "Picture($id=$value)"
+    }
+
+}
+
+
+class Audio(private val id: Int,
+            private val value: ByteArray) {
+
+    fun id() = id
+    fun value() = value
+    override fun toString(): String {
+        return "Audio($id=$value)"
     }
 
 }

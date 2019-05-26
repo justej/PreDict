@@ -34,6 +34,8 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         setContentView(R.layout.activity_navigation)
         setSupportActionBar(toolbar)
 
+        presenter.loadWords()
+
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -110,12 +112,17 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     //endregion
 
     fun updateWords(isTag: Boolean, query: String) {
-        if (presenter.wordsCount() == 0 && !isTag) {
+        if (query.isNotEmpty() && !presenter.searchByWord(query) && !isTag) {
             addNewWordText.text = "Add new card for the word \"$query\""
             addNewWordText.visibility = View.VISIBLE
             wordsView.visibility = View.GONE
         } else {
             addNewWordText.visibility = View.GONE
+        }
+
+        if (presenter.searchByWordLike(query).isEmpty() && !isTag) {
+            wordsView.visibility = View.GONE
+        } else {
             wordsView.visibility = View.VISIBLE
         }
 

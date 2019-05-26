@@ -10,20 +10,20 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.github.justej.predict.R
-import com.github.justej.predict.model.data.PARAM_WORD
-import com.github.justej.predict.model.data.PARAM_WORD_CARD
-import com.github.justej.predict.model.data.WordCard
-import com.github.justej.predict.utils.joinByteArrays
+import com.github.justej.predict.model.data.*
 import com.github.justej.predict.utils.joinLines
+import com.github.justej.predict.utils.joinResources
 import com.github.justej.predict.utils.updateEditable
 import kotlinx.android.synthetic.main.activity_new_card.*
 import kotlinx.android.synthetic.main.app_bar.*
+import java.util.*
 import java.util.stream.Collectors
+import java.util.stream.IntStream
 
 /**
  * In this ui, a user fills out:
  * - catchword - mandatory
- * - homonymId
+ * - homonymDiscriminator
  * - transcription
  * - translation - mandatory
  * - notes
@@ -127,21 +127,21 @@ class NewCardActivity : AppCompatActivity() {
     private fun showWordCard(wordCard: WordCard) {
         // Mandatory fields
         if (wordCard.catchWordSpellings.isNotEmpty()) {
-            updateEditable(catchWordEdit.text, joinLines(wordCard.catchWordSpellings))
+            updateEditable(catchWordEdit.text, wordCard.catchWordSpellings)
         }
 
         if (wordCard.translation.isNotEmpty()) {
-            updateEditable(translationEdit.text, joinLines(wordCard.translation))
+            updateEditable(translationEdit.text, wordCard.translation)
         }
 
         // Optional fields
-        showNonEmptyField(wordCard.homonymId, homonymIdLabel, homonymIdEdit)
+        showNonEmptyField(wordCard.homonymDiscriminator, homonymIdLabel, homonymIdEdit)
         showNonEmptyField(wordCard.transcription, transcriptionLabel, transcriptionEdit)
         showNonEmptyField(wordCard.notes, notesLabel, notesEdit)
         showNonEmptyField(wordCard.examples, examplesLabel, examplesEdit)
         showNonEmptyField(joinLines(wordCard.tags), tagsLabel, tagsEdit)
-        showNonEmptyField(joinByteArrays(wordCard.audio), audioLabel, audioEdit)
-        showNonEmptyField(joinByteArrays(wordCard.pictures), picturesLabel, picturesEdit)
+        showNonEmptyField(joinResources(wordCard.audio), audioLabel, audioEdit)
+        showNonEmptyField(joinResources(wordCard.pictures), picturesLabel, picturesEdit)
 
         catchWordEdit.requestFocus()
     }
@@ -162,15 +162,15 @@ class NewCardActivity : AppCompatActivity() {
     }
 
     private fun populateWordCard(): WordCard {
-        return WordCard(catchWordEdit.text.split("\n"),
+        return WordCard(catchWordEdit.text.toString(),
                 homonymIdEdit.text.toString(),
                 transcriptionEdit.text.toString(),
-                translationEdit.text.split("\n"),
+                translationEdit.text.toString(),
                 notesEdit.text.toString(),
                 tagsEdit.text.split("\n"),
                 examplesEdit.text.toString(),
-                toListOfByteArray(audioEdit.text),
-                toListOfByteArray(picturesEdit.text))
+                toListOfAudios(audioEdit.text),
+                toListOfPictures(picturesEdit.text))
     }
 
     private fun collapseEditTextToLabel(label: TextView, edit: TextView) {
@@ -178,27 +178,25 @@ class NewCardActivity : AppCompatActivity() {
         edit.visibility = View.GONE
     }
 
-    private fun toListOfByteArray(data: Editable): List<ByteArray> {
+    private fun toListOfAudios(data: Editable): List<Audio> {
+        val listOfData = data.split("\n")
+        val audios = mutableListOf<Audio>()
+        for ((index, value) in listOfData.withIndex()) {
+            audios.add(Audio(index, value.toByteArray()))
+        }
+
+        return audios
+    }
+
+    private fun toListOfPictures(data: Editable): List<Picture> {
         val listOfData = data.split("\n")
 
-        return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> listOfData.stream()
-                    .filter { it.isEmpty() }
-                    .map { it.toByteArray() }
-                    .collect(Collectors.toList())
-            else -> {
-                val output = mutableListOf<ByteArray>()
-                for (datum in listOfData) {
-                    if (datum.isEmpty()) {
-                        continue
-                    }
-
-                    output.add(datum.toByteArray())
-                }
-
-                output
-            }
+        val pictures = mutableListOf<Picture>()
+        for ((index, value) in listOfData.withIndex()) {
+            pictures.add(Picture(index, value.toByteArray()))
         }
+
+        return pictures
     }
 
 }
