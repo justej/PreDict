@@ -14,6 +14,15 @@ class Persister(private val context: Context) {
 
     private val db by lazy { Room.databaseBuilder(context, AppDatabase::class.java, "WORDS").build() }
 
+    fun getWordCardByWord(word: String, homonymDiscriminator: String): WordCard? {
+        var wordCard: WordCard? = null
+        thread {
+            wordCard = db.wordDao().getWordCardByWord(word, homonymDiscriminator)
+        }.join()
+
+        return wordCard
+    }
+
     fun getWordCardByWordLike(word: String): List<WordCard> {
         var res: List<WordCard> = listOf()
         thread {

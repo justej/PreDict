@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun scheduleSplash() {
         Handler().postDelayed({
-            startActivity(Intent(this, NewCardActivity::class.java))
+            startActivity(Intent(this, WordsActivity::class.java))
         }, SPLASH_SCREEN_DURATION)
     }
 

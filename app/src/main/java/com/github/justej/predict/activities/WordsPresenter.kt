@@ -2,19 +2,23 @@ package com.github.justej.predict.activities
 
 import android.app.Activity
 import android.content.Intent
+import com.github.justej.predict.model.data.PARAM_HOMONYM_DISCRIMINATOR
 import com.github.justej.predict.model.data.PARAM_WORD
 import com.github.justej.predict.model.data.TAG_SYMBOL
+import com.github.justej.predict.model.data.WordCard
 import com.github.justej.predict.model.db.Persister
 
 class WordsPresenter(private val ui: Activity) {
 
     private val persister = Persister(ui)
-    private var wordsToDisplay: List<String> = listOf()
-    private val words by lazy { loadWordsFromDb() }
+    private var wordsToDisplay: List<WordCard> = listOf()
+    private val words = mutableSetOf<WordCard>()
 
-    private fun loadWordsFromDb() = persister.getWordCardByWordLike("").map { it.catchWordSpellings }.toMutableSet()
+    private fun loadWordsFromDb() = persister.getWordCardByWordLike("").toMutableSet()
 
     fun loadWords() {
+        words.clear()
+        words.addAll(loadWordsFromDb())
         wordsToDisplay = words.toList()
     }
 
@@ -34,18 +38,19 @@ class WordsPresenter(private val ui: Activity) {
         wordsUpdater(isTag, query)
     }
 
-    fun searchByWord(word: String) = words.contains(word)
+    fun searchByWord(word: String) = words
+            .filter { it.catchWordSpellings.split("/n").contains(word) }
+            .any()
 
-    fun searchByWordLike(word: String) = words.filter { it.contains(word) }
+    fun searchByWordLike(word: String) = words.filter { it.catchWordSpellings.contains(word) }
 
-    fun searchByTag(tag: String): List<String> = persister.getWordCardByTag(tag)
-            .map { it.catchWordSpellings }
+    fun searchByTag(tag: String): List<WordCard> = persister.getWordCardByTag(tag)
 
-    fun addNewWord(word: String) {
-        val intent = Intent(ui, NewCardActivity::class.java)
+    fun createOrEditWordCard(word: String, homonymDiscriminator: String) {
+        val intent = Intent(ui, WordCardActivity::class.java)
         intent.putExtra(PARAM_WORD, word)
+        intent.putExtra(PARAM_HOMONYM_DISCRIMINATOR, homonymDiscriminator)
         ui.startActivity(intent)
-        words.addAll(loadWordsFromDb())
     }
 
 }

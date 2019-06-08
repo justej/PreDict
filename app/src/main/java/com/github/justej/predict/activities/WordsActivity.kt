@@ -1,18 +1,18 @@
 package com.github.justej.predict.activities
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.SearchView
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.ToggleButton
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.TAG_SYMBOL
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_navigation.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.content_navigation.*
@@ -34,8 +34,6 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         setContentView(R.layout.activity_navigation)
         setSupportActionBar(toolbar)
 
-        presenter.loadWords()
-
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -44,6 +42,12 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         inflateRecyclerView()
         configureSearchView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.loadWords()
+        viewAdapter.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
@@ -105,8 +109,9 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
     //region Event handlers
 
-    fun addNewWord(view: View) {
-        presenter.addNewWord(searchView.query.toString())
+    fun addWord(view: View) {
+        presenter.createOrEditWordCard(searchView.query.toString(), "")
+        viewAdapter.notifyDataSetChanged()
     }
 
     //endregion
@@ -207,9 +212,15 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.wordLabel.text = presenter.word(position)
+        val word = presenter.word(position)
+        holder.itemView.wordLabel.text = word.catchWordSpellings
+        holder.itemView.transcriptionLabel.text = if (word.transcription.isBlank()) {""} else {"[${word.transcription}]"}
+        holder.itemView.translationLabel.text = word.translation
+        holder.viewGroup.setOnClickListener {
+            presenter.createOrEditWordCard(word.catchWordSpellings, word.homonymDiscriminator)
+        }
     }
 
 }
 
-class ViewHolder(viewGroup: ViewGroup) : RecyclerView.ViewHolder(viewGroup)
+class ViewHolder(internal val viewGroup: ViewGroup) : RecyclerView.ViewHolder(viewGroup)

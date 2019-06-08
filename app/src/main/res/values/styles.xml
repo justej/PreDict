@@ -35,8 +35,16 @@
     </style>
 
     <style name="ui_editable" parent="ui_height_0dp_weight_match_parent">
-        <item name="android:inputType">textMultiLine</item>
         <item name="android:editable">true</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="ui_editable_multiline" parent="ui_editable">
+        <item name="android:inputType">textMultiLine</item>
+    </style>
+
+    <style name="ui_editable_stretchable_multiline" parent="ui_editable_multiline">
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="ui_label" parent="ui_height_0dp_weight_match_parent">

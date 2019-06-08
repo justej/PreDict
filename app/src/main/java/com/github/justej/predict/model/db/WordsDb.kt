@@ -52,7 +52,7 @@ abstract class WordDao {
         return if (wordIds.isEmpty()) {
             listOf()
         } else {
-            getWordCardsByWordId(wordIds)
+            getWordCardsByWordIds(wordIds)
         }
     }
 
@@ -61,7 +61,7 @@ abstract class WordDao {
         return if (wordIds.isEmpty()) {
             listOf()
         } else {
-            getWordCardsByWordId(wordIds)
+            getWordCardsByWordIds(wordIds)
         }
     }
 
@@ -71,14 +71,18 @@ abstract class WordDao {
             return WordCard.EMPTY
         }
 
-        val wordCards = getWordCardsByWordId(listOf(wordId))
+        val wordCards = getWordCardsByWordIds(listOf(wordId))
         // WordCards size must be 1 since for an existing word ID the must be a single card (it must
         // exist and must be only one)
+        if (wordCards.size != 1) {
+            Log.e(TAG, "Found zero or multiple word cards for wordId=$wordId")
+            return WordCard.EMPTY
+        }
         return wordCards[0]
     }
 
     @Transaction
-    open fun getWordCardsByWordId(wordIds: List<Int>): List<WordCard> {
+    open fun getWordCardsByWordIds(wordIds: List<Int>): List<WordCard> {
         if (wordIds.isEmpty()) {
             return listOf()
         }
@@ -88,13 +92,17 @@ abstract class WordDao {
             val spellingVariants = wordDtos.joinToString("\n") { it.word }
             val homonymDiscriminator = wordDtos[0].homonymDiscriminator
             val card = getWordCardByWordId(wordId)
+            if (card == null) {
+                Log.w(TAG, "Couldn't find a word card for wordId=$wordId")
+                return@map null
+            }
             val tags = getTagsByCardId(card.id)
             val audios = getResourcesByCardId(card.id, ResourceType.AUDIO.value)
                     .map { Audio(it.id, it.resource) }
             val pictures = getResourcesByCardId(card.id, ResourceType.PICTURE.value)
                     .map { Picture(it.id, it.resource) }
             WordCard(spellingVariants, homonymDiscriminator, card.transcription, card.translation, card.notes, tags, card.examples, audios, pictures)
-        }
+        }.filterNotNull()
     }
 
     @Query("""SELECT w.ID
@@ -124,7 +132,7 @@ abstract class WordDao {
         FROM WORD_CARDS wc
         WHERE wc.WORD_ID = :wordId
         LIMIT 1""")
-    abstract fun getWordCardByWordId(wordId: Int): WordCardDto
+    abstract fun getWordCardByWordId(wordId: Int): WordCardDto?
 
     @Query("""SELECT t.TAG
         FROM TAGS t, TAGS_MAP tm

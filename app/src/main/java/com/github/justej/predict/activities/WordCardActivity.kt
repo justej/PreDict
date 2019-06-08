@@ -1,24 +1,20 @@
 package com.github.justej.predict.activities
 
-import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.*
 import com.github.justej.predict.utils.joinLines
 import com.github.justej.predict.utils.joinResources
 import com.github.justej.predict.utils.updateEditable
-import kotlinx.android.synthetic.main.activity_new_card.*
+import kotlinx.android.synthetic.main.activity_word_card.*
 import kotlinx.android.synthetic.main.app_bar.*
-import java.util.*
-import java.util.stream.Collectors
-import java.util.stream.IntStream
 
 /**
  * In this ui, a user fills out:
@@ -33,40 +29,46 @@ import java.util.stream.IntStream
  * - picture
  * - links to related words
  */
-class NewCardActivity : AppCompatActivity() {
+class WordCardActivity : AppCompatActivity() {
 
-    private val presenter = NewCardPresenter(this)
+    private val presenter = WordCardPresenter(this)
 
     //region Lifecycle methods
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_card)
+        setContentView(R.layout.activity_word_card)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_check)
 
-        showWordCard(WordCard.EMPTY)
-        val word = intent?.extras?.getString(PARAM_WORD, "")
-        word?.let { updateEditable(catchWordEdit.text, it) }
+        val extras = intent?.extras
+        val word = extras?.getString(PARAM_WORD, "") ?: ""
+        val homonymDiscriminator = extras?.getString(PARAM_HOMONYM_DISCRIMINATOR, "") ?: ""
+        val wordCard = if (word == "") {
+            title = getString(R.string.title_activity_add_word)
+            WordCard.EMPTY
+        } else {
+            title = getString(R.string.title_activity_edit_word)
+            presenter.getWordCard(word, homonymDiscriminator) ?: WordCard.EMPTY
+        }
+        showWordCard(wordCard)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         val wordCard = populateWordCard()
-
         outState?.putParcelable(PARAM_WORD_CARD, wordCard)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-
         val wordCard = (savedInstanceState?.get(PARAM_WORD_CARD) ?: WordCard.EMPTY) as WordCard
         showWordCard(wordCard)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.new_card_menu, menu)
+        menuInflater.inflate(R.menu.word_card_menu, menu)
 
         return true
     }
