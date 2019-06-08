@@ -12,7 +12,9 @@ enum class ResourceType(val value: Int) {
 
 class Persister(private val context: Context) {
 
-    private val db by lazy { Room.databaseBuilder(context, AppDatabase::class.java, "WORDS").build() }
+    private val db by lazy {
+        Room.databaseBuilder(context, WordsDatabase::class.java, WordsDatabase.NAME).build()
+    }
 
     fun getWordCardByWord(word: String, homonymDiscriminator: String): WordCard? {
         var wordCard: WordCard? = null

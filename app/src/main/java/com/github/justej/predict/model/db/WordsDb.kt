@@ -37,10 +37,13 @@ private const val TAG = "WordsDb"
     WordDto::class,
     WordCardDto::class],
         version = 1)
-abstract class AppDatabase : RoomDatabase() {
+abstract class WordsDatabase : RoomDatabase() {
 
     abstract fun wordDao(): WordDao
 
+    companion object {
+        const val NAME = "WORDS"
+    }
 }
 
 
