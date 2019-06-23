@@ -8,21 +8,16 @@ class WordCardPresenter(ui: Activity) {
 
     private val persister = Persister(ui)
 
-    fun getWordCard(word: String, homonymDiscriminator: String): WordCard? {
+    fun getWordCard(word: String, homonymDiscriminator: String): WordCard {
         return persister.getWordCardByWord(word, homonymDiscriminator)
     }
 
-    fun saveWordCard(wordCard: WordCard) {
-        // TODO: before storing:
-        // 1. check if the word isn't empty
-        // 2. check if the word (one of spelling variants) already exists
-        // 3. suggest to change homonym discriminator in a dialog
-
-        if (wordCard.catchWordSpellings == "") {
+    fun saveWordCard(wordCard: WordCard, originalWordCard: WordCard) {
+        if (wordCard.catchWordSpellings.isBlank()) {
             return
         }
 
-        persister.putWordCard(wordCard)
+        persister.insertOrUpdateWordCard(wordCard, originalWordCard)
     }
 
 }

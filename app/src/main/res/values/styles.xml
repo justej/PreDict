@@ -8,19 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ui_translation_label" parent="AppTheme">
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginStart">0dp</item>
-        <item name="android:layout_marginEnd">0dp</item>
-        <item name="android:layout_marginLeft">0dp</item>
-        <item name="android:layout_marginRight">0dp</item>
-
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="ui_height_0dp_weight_match_parent" parent="AppTheme">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginStart">8dp</item>

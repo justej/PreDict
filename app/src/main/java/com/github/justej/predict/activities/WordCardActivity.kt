@@ -1,5 +1,6 @@
 package com.github.justej.predict.activities
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.view.Menu
@@ -7,12 +8,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.*
-import com.github.justej.predict.utils.joinLines
-import com.github.justej.predict.utils.joinResources
-import com.github.justej.predict.utils.updateEditable
+import com.github.justej.predict.utils.StringUtils
 import kotlinx.android.synthetic.main.activity_word_card.*
 import kotlinx.android.synthetic.main.app_bar.*
 
@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.app_bar.*
 class WordCardActivity : AppCompatActivity() {
 
     private val presenter = WordCardPresenter(this)
+    private lateinit var originalWordCard: WordCard
 
     //region Lifecycle methods
 
@@ -45,14 +46,20 @@ class WordCardActivity : AppCompatActivity() {
         val extras = intent?.extras
         val word = extras?.getString(PARAM_WORD, "") ?: ""
         val homonymDiscriminator = extras?.getString(PARAM_HOMONYM_DISCRIMINATOR, "") ?: ""
-        val wordCard = if (word == "") {
-            title = getString(R.string.title_activity_add_word)
+        originalWordCard = if (word == "") {
             WordCard.EMPTY
         } else {
-            title = getString(R.string.title_activity_edit_word)
-            presenter.getWordCard(word, homonymDiscriminator) ?: WordCard.EMPTY
+            presenter.getWordCard(word, homonymDiscriminator)
         }
-        showWordCard(wordCard)
+
+        showWordCard(originalWordCard)
+
+        title = if (originalWordCard == WordCard.EMPTY) {
+            StringUtils.updateEditable(catchWordEdit.text, word)
+            getString(R.string.title_activity_add_word)
+        } else {
+            getString(R.string.title_activity_edit_word)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -76,14 +83,40 @@ class WordCardActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             android.R.id.home -> {
-                presenter.saveWordCard(populateWordCard())
+                val wordCard = populateWordCard()
+                var alertMessage: String? = null
+
+                if (wordCard.catchWordSpellings.isBlank()) {
+                    alertMessage = "Word can't be empty"
+                }
+
+                val existingWords = wordCard.catchWordSpellings
+                        .split("\n")
+                        .filter { !originalWordCard.catchWordSpellings.contains(it) }
+                        .map { Pair(it, presenter.getWordCard(it, wordCard.homonymDiscriminator)) }
+                        .filter { it.second != WordCard.EMPTY }
+                        .map { it.first }
+
+                if (existingWords.isNotEmpty()) {
+                    alertMessage = "Word(s) ${existingWords.joinToString(", ", "\"", "\"")} already exist(s).\nTry to change homonym discriminator or delete existing word card first."
+                }
+
+                if (alertMessage != null) {
+                    AlertDialog.Builder(this)
+                            .setMessage(alertMessage)
+                            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+                            .show()
+                    return true
+                }
+
+                presenter.saveWordCard(wordCard, originalWordCard)
                 finish()
-                true
+                return true
             }
 
             R.id.discard -> {
                 finish()
-                true
+                return true
             }
 
             else -> super.onOptionsItemSelected(item)
@@ -124,16 +157,14 @@ class WordCardActivity : AppCompatActivity() {
 
     //endregion
 
-    //TODO: add "save" and "discard" buttons
-
     private fun showWordCard(wordCard: WordCard) {
         // Mandatory fields
         if (wordCard.catchWordSpellings.isNotEmpty()) {
-            updateEditable(catchWordEdit.text, wordCard.catchWordSpellings)
+            StringUtils.updateEditable(catchWordEdit.text, wordCard.catchWordSpellings)
         }
 
         if (wordCard.translation.isNotEmpty()) {
-            updateEditable(translationEdit.text, wordCard.translation)
+            StringUtils.updateEditable(translationEdit.text, wordCard.translation)
         }
 
         // Optional fields
@@ -141,16 +172,16 @@ class WordCardActivity : AppCompatActivity() {
         showNonEmptyField(wordCard.transcription, transcriptionLabel, transcriptionEdit)
         showNonEmptyField(wordCard.notes, notesLabel, notesEdit)
         showNonEmptyField(wordCard.examples, examplesLabel, examplesEdit)
-        showNonEmptyField(joinLines(wordCard.tags), tagsLabel, tagsEdit)
-        showNonEmptyField(joinResources(wordCard.audio), audioLabel, audioEdit)
-        showNonEmptyField(joinResources(wordCard.pictures), picturesLabel, picturesEdit)
+        showNonEmptyField(StringUtils.joinLines(wordCard.tags), tagsLabel, tagsEdit)
+        showNonEmptyField(StringUtils.joinResources(wordCard.audio), audioLabel, audioEdit)
+        showNonEmptyField(StringUtils.joinResources(wordCard.pictures), picturesLabel, picturesEdit)
 
         catchWordEdit.requestFocus()
     }
 
     private fun showNonEmptyField(value: String, label: TextView, edit: EditText) {
         if (value.isNotEmpty()) {
-            updateEditable(edit.text, value)
+            StringUtils.updateEditable(edit.text, value)
             expandLabelToEditText(label, edit)
         } else {
             collapseEditTextToLabel(label, edit)
@@ -164,13 +195,15 @@ class WordCardActivity : AppCompatActivity() {
     }
 
     private fun populateWordCard(): WordCard {
-        return WordCard(catchWordEdit.text.toString(),
-                homonymIdEdit.text.toString(),
-                transcriptionEdit.text.toString(),
-                translationEdit.text.toString(),
+        return WordCard(StringUtils.normalize(catchWordEdit.text),
+                StringUtils.normalize(homonymIdEdit.text),
+                StringUtils.normalize(transcriptionEdit.text),
+                StringUtils.normalize(translationEdit.text),
                 notesEdit.text.toString(),
-                tagsEdit.text.split("\n"),
-                examplesEdit.text.toString(),
+                tagsEdit.text
+                        .split("\n")
+                        .map { it.trim() },
+                StringUtils.normalize(examplesEdit.text),
                 toListOfAudios(audioEdit.text),
                 toListOfPictures(picturesEdit.text))
     }

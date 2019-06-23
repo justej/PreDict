@@ -16,8 +16,8 @@ class Persister(private val context: Context) {
         Room.databaseBuilder(context, WordsDatabase::class.java, WordsDatabase.NAME).build()
     }
 
-    fun getWordCardByWord(word: String, homonymDiscriminator: String): WordCard? {
-        var wordCard: WordCard? = null
+    fun getWordCardByWord(word: String, homonymDiscriminator: String): WordCard {
+        var wordCard: WordCard = WordCard.EMPTY
         thread {
             wordCard = db.wordDao().getWordCardByWord(word, homonymDiscriminator)
         }.join()
@@ -28,7 +28,7 @@ class Persister(private val context: Context) {
     fun getWordCardByWordLike(word: String): List<WordCard> {
         var res: List<WordCard> = listOf()
         thread {
-            res = if (word.trim().isEmpty()) {
+            res = if (word.isEmpty()) {
                 db.wordDao().getAllWordCards()
             } else {
                 db.wordDao().getWordCardsByWordLike(word)
@@ -41,9 +41,9 @@ class Persister(private val context: Context) {
         return listOf()
     }
 
-    fun putWordCard(wordCard: WordCard) {
+    fun insertOrUpdateWordCard(wordCard: WordCard, originalWordCard: WordCard) {
         thread {
-            db.wordDao().putWordCard(wordCard)
+            db.wordDao().insertOrUpdateWordCard(wordCard, originalWordCard)
         }.join()
     }
 

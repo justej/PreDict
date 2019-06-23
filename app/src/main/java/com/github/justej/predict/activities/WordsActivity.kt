@@ -214,7 +214,21 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val word = presenter.word(position)
         holder.itemView.wordLabel.text = word.catchWordSpellings
-        holder.itemView.transcriptionLabel.text = if (word.transcription.isBlank()) {""} else {"[${word.transcription}]"}
+
+        if (word.homonymDiscriminator.isBlank()) {
+            holder.itemView.discriminatorLabel.visibility = View.GONE
+        } else {
+            holder.itemView.discriminatorLabel.text = " (${word.homonymDiscriminator})"
+            holder.itemView.discriminatorLabel.visibility = View.VISIBLE
+        }
+
+        if (word.transcription.isBlank()) {
+            holder.itemView.transcriptionLabel.visibility = View.GONE
+        } else {
+            holder.itemView.transcriptionLabel.text = "[${word.transcription}]"
+            holder.itemView.transcriptionLabel.visibility = View.VISIBLE
+        }
+
         holder.itemView.translationLabel.text = word.translation
         holder.viewGroup.setOnClickListener {
             presenter.createOrEditWordCard(word.catchWordSpellings, word.homonymDiscriminator)
