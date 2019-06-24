@@ -68,7 +68,7 @@ abstract class WordDao {
         val cardId = getCardIdByWord(word, homonymDiscriminator) ?: return WordCard.EMPTY
 
         val wordCards = getWordCardsByIds(listOf(cardId))
-        // WordCards size must be 1 since for an existing word ID there must be a single card (it
+        // WordCards size must be 1 since for an existing card ID there must be a single card (it
         // must exist and must be exactly one)
         if (wordCards.size != 1) {
             Log.e(TAG, "Found zero or multiple word cards for wordId=$cardId")
@@ -188,6 +188,16 @@ abstract class WordDao {
         Log.d(TAG, "-- putWordCard: after clean up: cardIds=$cardIdsAfterCleanUp")
     }
 
+    @Transaction
+    open fun deleteWordCardByWord(word: String, homonymDiscriminator: String) {
+        val cardId = getCardIdByWord(word, homonymDiscriminator) ?: return
+
+        Log.i(TAG, "-- Word card with cardId=$cardId will be deleted")
+
+        deleteWordsByCardId(listOf(cardId))
+        deleteTranslationByCardId(listOf(cardId))
+    }
+
     @Query("""SELECT wc.ID
         FROM WORD_CARDS wc""")
     abstract fun getAllCardIds(): List<Int>
@@ -244,8 +254,13 @@ abstract class WordDao {
     abstract fun cleanUpWordCards()
 
     @Query("""DELETE FROM WORDS
-      WHERE CARD_ID IN (:cardId)""")
-    abstract fun deleteWordsByCardId(cardId: List<Int>)
+      WHERE CARD_ID IN (:cardIds)""")
+    abstract fun deleteWordsByCardId(cardIds: List<Int>)
+
+    @Query("""DELETE FROM WORD_CARDS
+      WHERE ID IN (:cardIds)""")
+    abstract fun deleteTranslationByCardId(cardIds: List<Int>)
+
 }
 
 

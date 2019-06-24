@@ -44,18 +44,18 @@ class WordCardActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_check)
 
         val extras = intent?.extras
-        val word = extras?.getString(PARAM_WORD, "") ?: ""
+        val wordSpellings = extras?.getString(PARAM_WORD, "") ?: ""
         val homonymDiscriminator = extras?.getString(PARAM_HOMONYM_DISCRIMINATOR, "") ?: ""
-        originalWordCard = if (word == "") {
+        originalWordCard = if (wordSpellings == "") {
             WordCard.EMPTY
         } else {
-            presenter.getWordCard(word, homonymDiscriminator)
+            presenter.getWordCard(wordSpellings.split("\n")[0], homonymDiscriminator)
         }
 
         showWordCard(originalWordCard)
 
         title = if (originalWordCard == WordCard.EMPTY) {
-            StringUtils.updateEditable(catchWordEdit.text, word)
+            StringUtils.updateEditable(catchWordEdit.text, wordSpellings)
             getString(R.string.title_activity_add_word)
         } else {
             getString(R.string.title_activity_edit_word)

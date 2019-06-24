@@ -46,6 +46,10 @@ class WordsPresenter(private val ui: Activity) {
 
     fun searchByTag(tag: String): List<WordCard> = persister.getWordCardByTag(tag)
 
+    fun deleteWord(wordCard: WordCard) {
+        persister.deleteWord(wordCard)
+    }
+
     fun createOrEditWordCard(word: String, homonymDiscriminator: String) {
         val intent = Intent(ui, WordCardActivity::class.java)
         intent.putExtra(PARAM_WORD, word)

@@ -47,4 +47,12 @@ class Persister(private val context: Context) {
         }.join()
     }
 
+    fun deleteWord(wordCard: WordCard) {
+        thread {
+            wordCard.catchWordSpellings.split("\n").forEach {
+                db.wordDao().deleteWordCardByWord(it, wordCard.homonymDiscriminator)
+            }
+        }
+    }
+
 }

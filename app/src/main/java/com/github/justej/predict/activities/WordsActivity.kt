@@ -1,10 +1,12 @@
 package com.github.justej.predict.activities
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.ToggleButton
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
@@ -212,26 +214,41 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val word = presenter.word(position)
-        holder.itemView.wordLabel.text = word.catchWordSpellings
+        val wordCard = presenter.word(position)
+        holder.apply {
+            itemView.wordLabel.text = wordCard.catchWordSpellings.replace("\n", "; ")
 
-        if (word.homonymDiscriminator.isBlank()) {
-            holder.itemView.discriminatorLabel.visibility = View.GONE
-        } else {
-            holder.itemView.discriminatorLabel.text = " (${word.homonymDiscriminator})"
-            holder.itemView.discriminatorLabel.visibility = View.VISIBLE
-        }
+            if (wordCard.homonymDiscriminator.isBlank()) {
+                itemView.discriminatorLabel.visibility = View.GONE
+            } else {
+                itemView.discriminatorLabel.text = " (${wordCard.homonymDiscriminator})"
+                itemView.discriminatorLabel.visibility = View.VISIBLE
+            }
 
-        if (word.transcription.isBlank()) {
-            holder.itemView.transcriptionLabel.visibility = View.GONE
-        } else {
-            holder.itemView.transcriptionLabel.text = "[${word.transcription}]"
-            holder.itemView.transcriptionLabel.visibility = View.VISIBLE
-        }
+            if (wordCard.transcription.isBlank()) {
+                itemView.transcriptionLabel.visibility = View.GONE
+            } else {
+                itemView.transcriptionLabel.text = "[${wordCard.transcription}]"
+                itemView.transcriptionLabel.visibility = View.VISIBLE
+            }
 
-        holder.itemView.translationLabel.text = word.translation
-        holder.viewGroup.setOnClickListener {
-            presenter.createOrEditWordCard(word.catchWordSpellings, word.homonymDiscriminator)
+            itemView.translationLabel.text = wordCard.translation
+            viewGroup.setOnClickListener {
+                presenter.createOrEditWordCard(wordCard.catchWordSpellings, wordCard.homonymDiscriminator)
+            }
+            viewGroup.setOnLongClickListener {
+                AlertDialog.Builder(viewGroup.context)
+                        .setMessage("Delete word card?")
+                        .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                            run {
+                                presenter.deleteWord(wordCard)
+                                notifyDataSetChanged()
+                            }
+                        }
+                        .setNegativeButton("No") { _: DialogInterface, _: Int -> }
+                        .show()
+                return@setOnLongClickListener true
+            }
         }
     }
 
