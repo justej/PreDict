@@ -27,6 +27,10 @@ class StringUtils {
             editable.replace(0, editable.length, newText)
         }
 
+        fun escape(text: String): String {
+            return text.replace("<", "&lt;").replace(">", "&gt;")
+        }
+
     }
 
 }

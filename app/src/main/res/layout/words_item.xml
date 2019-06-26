@@ -7,54 +7,13 @@
     android:background="@color/background">
 
     <TextView
-        android:id="@+id/wordLabel"
-        style="@style/ui_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="catch word"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/translationLabel"
-        app:layout_constraintEnd_toStartOf="@+id/discriminatorLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/discriminatorLabel"
-        style="@style/ui_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text=" (discriminator)"
-        android:textSize="13sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/translationLabel"
-        app:layout_constraintEnd_toStartOf="@+id/transcriptionLabel"
-        app:layout_constraintStart_toEndOf="@+id/wordLabel"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/transcriptionLabel"
+        android:id="@+id/catchWordSpannable"
         style="@style/ui_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="[translation]"
-        android:textColor="#666666"
-        android:textStyle="italic"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/translationLabel"
-        app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintStart_toEndOf="@id/discriminatorLabel"
+        android:text="catch word (homonym discriminator) [transcription]"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -63,24 +22,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:ellipsize="end"
         android:gravity="start"
         android:singleLine="true"
         android:text="translation"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageButton
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:contentDescription="TODO"
-        android:gravity="center"
-        android:src="@android:drawable/ic_menu_add"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/catchWordSpannable" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

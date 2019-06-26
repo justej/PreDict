@@ -1,7 +1,9 @@
 package com.github.justej.predict.activities
 
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.ToggleButton
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.TAG_SYMBOL
+import com.github.justej.predict.utils.StringUtils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_navigation.*
 import kotlinx.android.synthetic.main.app_bar.*
@@ -216,20 +219,24 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val wordCard = presenter.word(position)
         holder.apply {
-            itemView.wordLabel.text = wordCard.catchWordSpellings.replace("\n", "; ")
-
-            if (wordCard.homonymDiscriminator.isBlank()) {
-                itemView.discriminatorLabel.visibility = View.GONE
+            val catchWordsSpellings = "<b>${StringUtils.escape(wordCard.catchWordSpellings.replace("\n", "; "))}</b>"
+            val homonymDiscriminator = if (wordCard.homonymDiscriminator.isBlank()) {
+                ""
             } else {
-                itemView.discriminatorLabel.text = " (${wordCard.homonymDiscriminator})"
-                itemView.discriminatorLabel.visibility = View.VISIBLE
+                " <sup><small>(${StringUtils.escape(wordCard.homonymDiscriminator)})</small></sup>"
+            }
+            val transcription = if (wordCard.transcription.isBlank()) {
+                ""
+            } else {
+                " <i>[${StringUtils.escape(wordCard.transcription)}]</i>"
             }
 
-            if (wordCard.transcription.isBlank()) {
-                itemView.transcriptionLabel.visibility = View.GONE
+            val testText = catchWordsSpellings + homonymDiscriminator + transcription
+
+            itemView.catchWordSpannable.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(testText, Html.FROM_HTML_MODE_COMPACT)
             } else {
-                itemView.transcriptionLabel.text = "[${wordCard.transcription}]"
-                itemView.transcriptionLabel.visibility = View.VISIBLE
+                Html.fromHtml(testText)
             }
 
             itemView.translationLabel.text = wordCard.translation

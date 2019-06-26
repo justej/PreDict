@@ -34,7 +34,7 @@
         android:layout_marginRight="8dp"
         android:gravity="end"
         android:text="@string/producer"
-        android:textSize="20dp"
+        android:textSize="@dimen/normal_font_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/splashLabel" />
