@@ -117,7 +117,22 @@ class WordCardActivity : AppCompatActivity() {
                 .map { it.first }
 
         if (existingWords.isNotEmpty()) {
-            alertMessage = "Card(s) for word(s) ${existingWords.joinToString(", ", "\"", "\"")} already exist(s).\nYou can change homonym discriminator or delete existing word card(s) first."
+            lateinit var firstPart: String
+            lateinit var secondPart: String
+            lateinit var thirdPart: String
+            if (existingWords.size == 1) {
+                firstPart = "Card for word "
+                secondPart = " already exists.\n"
+                thirdPart = " card"
+            } else {
+                firstPart = "Cards for words "
+                secondPart = " already exist.\n"
+                thirdPart = " cards"
+            }
+
+            alertMessage = firstPart + existingWords.joinToString(", ", "\"", "\"") +
+                    secondPart + "You can change homonym discriminator or delete existing word" +
+                    thirdPart + " first."
         }
 
         if (alertMessage != null) {
