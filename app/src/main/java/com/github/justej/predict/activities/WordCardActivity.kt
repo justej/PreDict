@@ -83,34 +83,12 @@ class WordCardActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             android.R.id.home -> {
-                val wordCard = populateWordCard()
-                var alertMessage: String? = null
+                saveWordCard()
+                return true
+            }
 
-                if (wordCard.catchWordSpellings.isBlank()) {
-                    alertMessage = "Word can't be empty"
-                }
-
-                val existingWords = wordCard.catchWordSpellings
-                        .split("\n")
-                        .filter { !originalWordCard.catchWordSpellings.contains(it) }
-                        .map { Pair(it, presenter.getWordCard(it, wordCard.homonymDiscriminator)) }
-                        .filter { it.second != WordCard.EMPTY }
-                        .map { it.first }
-
-                if (existingWords.isNotEmpty()) {
-                    alertMessage = "Word(s) ${existingWords.joinToString(", ", "\"", "\"")} already exist(s).\nTry to change homonym discriminator or delete existing word card first."
-                }
-
-                if (alertMessage != null) {
-                    AlertDialog.Builder(this)
-                            .setMessage(alertMessage)
-                            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
-                            .show()
-                    return true
-                }
-
-                presenter.saveWordCard(wordCard, originalWordCard)
-                finish()
+            R.id.clone -> {
+                cloneWordCard()
                 return true
             }
 
@@ -121,6 +99,52 @@ class WordCardActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun saveWordCard() {
+        val wordCard = populateWordCard()
+        var alertMessage: String? = null
+
+        if (wordCard.catchWordSpellings.isBlank()) {
+            alertMessage = "Word can't be empty"
+        }
+
+        val existingWords = wordCard.catchWordSpellings
+                .split("\n")
+                .filter { !originalWordCard.catchWordSpellings.contains(it) }
+                .map { Pair(it, presenter.getWordCard(it, wordCard.homonymDiscriminator)) }
+                .filter { it.second != WordCard.EMPTY }
+                .map { it.first }
+
+        if (existingWords.isNotEmpty()) {
+            alertMessage = "Card(s) for word(s) ${existingWords.joinToString(", ", "\"", "\"")} already exist(s).\nYou can change homonym discriminator or delete existing word card(s) first."
+        }
+
+        if (alertMessage != null) {
+            AlertDialog.Builder(this)
+                    .setMessage(alertMessage)
+                    .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+                    .show()
+            return
+        }
+
+        presenter.saveWordCard(wordCard, originalWordCard)
+        finish()
+    }
+
+    private fun cloneWordCard() {
+        title = getString(R.string.title_activity_add_word)
+        val tmpCard = populateWordCard()
+        originalWordCard = WordCard(tmpCard.catchWordSpellings,
+                tmpCard.homonymDiscriminator + "(1)",
+                tmpCard.transcription,
+                tmpCard.translation,
+                tmpCard.notes,
+                tmpCard.tags,
+                tmpCard.examples,
+                tmpCard.audio,
+                tmpCard.pictures)
+        showWordCard(originalWordCard)
     }
 
     //endregion
