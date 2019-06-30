@@ -47,6 +47,8 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         inflateRecyclerView()
         configureSearchView()
+
+        recyclerView.requestFocus()
     }
 
     override fun onResume() {
