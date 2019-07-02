@@ -20,4 +20,8 @@ class WordCardPresenter(ui: Activity) {
         persister.insertOrUpdateWordCard(wordCard, originalWordCard)
     }
 
+    fun deleteWord(wordCard: WordCard) {
+        persister.deleteWord(wordCard)
+    }
+
 }

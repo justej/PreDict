@@ -20,6 +20,7 @@
     <string name="label_text_add_examples">Add examples</string>
     <string name="label_text_add_audio">Add audio</string>
     <string name="label_text_add_pictures">Add pictures</string>
+    <string name="label_button_delete">Delete</string>
     <!--menu items-->
     <string name="menu_item_discard">Discard</string>
     <string name="menu_item_clone">Clone word card</string>

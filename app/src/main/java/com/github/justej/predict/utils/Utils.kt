@@ -1,5 +1,8 @@
 package com.github.justej.predict.utils
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.text.Editable
 
 class StringUtils {
@@ -29,6 +32,22 @@ class StringUtils {
 
         fun escape(text: String): String {
             return text.replace("<", "&lt;").replace(">", "&gt;")
+        }
+
+    }
+
+}
+
+class Dialogs {
+
+    companion object {
+
+        fun newDialogYesNo(ctx: Context, msg: String, positiveButtonListener: (DialogInterface, Int) -> Unit, negativeButtonListener: (DialogInterface, Int) -> Unit): AlertDialog? {
+            return AlertDialog.Builder(ctx)
+                    .setMessage(msg)
+                    .setPositiveButton("Yes", positiveButtonListener)
+                    .setNegativeButton("No", negativeButtonListener)
+                    .show()
         }
 
     }

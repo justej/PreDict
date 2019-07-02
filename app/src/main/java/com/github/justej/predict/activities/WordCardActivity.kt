@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.*
+import com.github.justej.predict.utils.Dialogs
 import com.github.justej.predict.utils.StringUtils
 import kotlinx.android.synthetic.main.activity_word_card.*
 import kotlinx.android.synthetic.main.app_bar.*
@@ -54,11 +55,13 @@ class WordCardActivity : AppCompatActivity() {
 
         showWordCard(originalWordCard)
 
-        title = if (originalWordCard == WordCard.EMPTY) {
+        if (originalWordCard == WordCard.EMPTY) {
             StringUtils.updateEditable(catchWordEdit.text, wordSpellings)
-            getString(R.string.title_activity_add_word)
+            title = getString(R.string.title_activity_add_word)
+            deleteButton.visibility = View.GONE
         } else {
-            getString(R.string.title_activity_edit_word)
+            title = getString(R.string.title_activity_edit_word)
+            deleteButton.visibility = View.VISIBLE
         }
     }
 
@@ -192,6 +195,18 @@ class WordCardActivity : AppCompatActivity() {
 
     fun expandPictures(view: View) {
         expandLabelToEditText(picturesLabel, picturesEdit).requestFocus()
+    }
+
+    fun onDeleteWord(view: View) {
+        Dialogs.newDialogYesNo(view.context,
+                "Delete the word card?",
+                { _: DialogInterface, _: Int ->
+                    run {
+                        presenter.deleteWord(originalWordCard)
+                        finish()
+                    }
+                },
+                { _: DialogInterface, _: Int -> })
     }
 
     //endregion

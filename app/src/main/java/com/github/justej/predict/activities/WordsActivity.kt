@@ -8,7 +8,6 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.ToggleButton
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.justej.predict.R
 import com.github.justej.predict.model.data.TAG_SYMBOL
+import com.github.justej.predict.utils.Dialogs
 import com.github.justej.predict.utils.StringUtils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_navigation.*
@@ -227,18 +227,19 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
             } else {
                 " <sup><small>(${StringUtils.escape(wordCard.homonymDiscriminator)})</small></sup>"
             }
+
             val transcription = if (wordCard.transcription.isBlank()) {
                 ""
             } else {
-                " <i>[${StringUtils.escape(wordCard.transcription)}]</i>"
+                " <i>[${StringUtils.escape(wordCard.transcription.replace("\n", "; "))}]</i>"
             }
 
-            val testText = catchWordsSpellings + homonymDiscriminator + transcription
+            val cardText = catchWordsSpellings + homonymDiscriminator + transcription
 
             itemView.catchWordSpannable.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(testText, Html.FROM_HTML_MODE_COMPACT)
+                Html.fromHtml(cardText, Html.FROM_HTML_MODE_COMPACT)
             } else {
-                Html.fromHtml(testText)
+                Html.fromHtml(cardText)
             }
 
             itemView.translationLabel.text = wordCard.translation
@@ -246,16 +247,15 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
                 presenter.createOrEditWordCard(wordCard.catchWordSpellings, wordCard.homonymDiscriminator)
             }
             viewGroup.setOnLongClickListener {
-                AlertDialog.Builder(viewGroup.context)
-                        .setMessage("Delete word card?")
-                        .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                Dialogs.newDialogYesNo(viewGroup.context,
+                        "Delete the word card?",
+                        { _: DialogInterface, _: Int ->
                             run {
                                 presenter.deleteWord(wordCard)
                                 notifyDataSetChanged()
                             }
-                        }
-                        .setNegativeButton("No") { _: DialogInterface, _: Int -> }
-                        .show()
+                        },
+                        { _: DialogInterface, _: Int -> })
                 return@setOnLongClickListener true
             }
         }
