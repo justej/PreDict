@@ -80,6 +80,9 @@ class WordCardActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.word_card_menu, menu)
 
+        val menuClone = menu.findItem(R.id.cloneMenuItem)
+        menuClone.isVisible = originalWordCard != WordCard.EMPTY
+
         return true
     }
 
@@ -90,12 +93,12 @@ class WordCardActivity : AppCompatActivity() {
                 return true
             }
 
-            R.id.clone -> {
+            R.id.cloneMenuItem -> {
                 cloneWordCard()
                 return true
             }
 
-            R.id.discard -> {
+            R.id.discardMenuItem -> {
                 finish()
                 return true
             }

@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/clone"
+        android:id="@+id/cloneMenuItem"
         android:icon="@drawable/ic_clone"
         android:title="@string/menu_item_clone"
         app:showAsAction="always" />
     <item
-        android:id="@+id/discard"
+        android:id="@+id/discardMenuItem"
         android:icon="@drawable/ic_close"
         android:title="@string/menu_item_discard"
         app:showAsAction="always" />
