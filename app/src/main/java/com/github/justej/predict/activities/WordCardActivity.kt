@@ -17,19 +17,6 @@ import com.github.justej.predict.utils.StringUtils
 import kotlinx.android.synthetic.main.activity_word_card.*
 import kotlinx.android.synthetic.main.app_bar.*
 
-/**
- * In this ui, a user fills out:
- * - catchword - mandatory
- * - homonymDiscriminator
- * - transcription
- * - translation - mandatory
- * - notes
- * - tags
- * - examples of usage
- * - audio
- * - picture
- * - links to related words
- */
 class WordCardActivity : AppCompatActivity() {
 
     private val presenter = WordCardPresenter(this)

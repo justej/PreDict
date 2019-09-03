@@ -24,14 +24,18 @@
     <!--menu items-->
     <string name="menu_item_discard">Discard</string>
     <string name="menu_item_clone">Clone word card</string>
+    <string name="menu_item_train_words">Check words</string>
+    <string name="menu_item_settings">Settings</string>
+    <string name="menu_item_edit_word">Edit word</string>
     <!--titles-->
     <string name="title_activity_words">Words</string>
     <string name="title_activity_add_word">Add word</string>
+    <string name="title_activity_edit_word">Edit word</string>
+    <string name="title_activity_train_words">Train words</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="title_activity_edit_word">Edit word</string>
 </resources>

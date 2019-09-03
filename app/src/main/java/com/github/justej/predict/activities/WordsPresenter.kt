@@ -2,10 +2,7 @@ package com.github.justej.predict.activities
 
 import android.app.Activity
 import android.content.Intent
-import com.github.justej.predict.model.data.PARAM_HOMONYM_DISCRIMINATOR
-import com.github.justej.predict.model.data.PARAM_WORD
-import com.github.justej.predict.model.data.TAG_SYMBOL
-import com.github.justej.predict.model.data.WordCard
+import com.github.justej.predict.model.data.*
 import com.github.justej.predict.model.db.Persister
 
 class WordsPresenter(private val ui: Activity) {
@@ -50,11 +47,17 @@ class WordsPresenter(private val ui: Activity) {
         persister.deleteWord(wordCard)
     }
 
-    fun createOrEditWordCard(word: String, homonymDiscriminator: String) {
+    fun startWordCardActivity(word: String, homonymDiscriminator: String) {
         val intent = Intent(ui, WordCardActivity::class.java)
         intent.putExtra(PARAM_WORD, word)
         intent.putExtra(PARAM_HOMONYM_DISCRIMINATOR, homonymDiscriminator)
         ui.startActivity(intent)
     }
 
+    fun startWordsVerifyActivity() {
+        val intent = Intent(ui, TrainWordsActivity::class.java)
+        intent.putExtra(PARAM_TRAIN_WORD_COUNT, 1000)
+        intent.putExtra(PARAM_TRAIN_WORD_SUBSET, TrainWordSubset.ALL)
+        ui.startActivity(intent)
+    }
 }

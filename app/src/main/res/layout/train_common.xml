@@ -1,0 +1,55 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/questionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/questionImage"
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_height"
+                android:contentDescription="Word image"
+                android:src="@drawable/ic_verify"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/questionTextLabel"
+                style="@style/ui_label.Multiline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:text="Word question"
+                app:layout_constraintTop_toBottomOf="@+id/questionImage" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/hintVisibilityControlLabel"
+            style="@style/ui_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show/hide hint"
+            app:layout_constraintTop_toBottomOf="@id/questionTextLabel" />
+
+        <TextView
+            android:id="@+id/hintLabel"
+            style="@style/ui_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hint (word, translation etc.)"
+            app:layout_constraintTop_toBottomOf="@id/hintVisibilityControlLabel" />
+
+    </LinearLayout>
+
+</FrameLayout>

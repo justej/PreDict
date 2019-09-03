@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--<item-->
-        <!--android:id="@+id/search_action_bar_item"-->
-        <!--android:icon="@android:drawable/ic_menu_search"-->
-        <!--android:title="@string/hint_search"-->
-        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
-        <!--app:showAsAction="never" />-->
 
     <item
-        android:id="@+id/search_menu_item"
+        android:id="@+id/trainWordsMenuItem"
+        android:icon="@drawable/ic_verify"
+        android:title="@string/menu_item_train_words"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/searchMenuItem"
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/hint_search"
         app:showAsAction="never" />
+
 </menu>

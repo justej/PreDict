@@ -4,10 +4,12 @@ import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.ToggleButton
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
@@ -77,7 +79,24 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.search_menu_item -> true // TODO: replace the placeholder
+            R.id.searchMenuItem -> {
+                true // TODO: replace the placeholder
+            }
+
+            R.id.trainWordsMenuItem -> {
+                AlertDialog.Builder(this)
+                        .setTitle("Choose mode")
+                        .setItems(arrayOf("Word -> Pick Translation", "Translation -> Pick Word", "Translation -> Write Word")) { dialog, which ->
+                            run {
+                                Log.i(TAG, "Item $which as been selected")
+                                presenter.startWordsVerifyActivity()
+                            }
+                        }
+                        .show()
+
+                return true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -117,7 +136,7 @@ class WordsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     //region Event handlers
 
     fun addWord(view: View) {
-        presenter.createOrEditWordCard(searchView.query.toString(), "")
+        presenter.startWordCardActivity(searchView.query.toString(), "")
         viewAdapter.notifyDataSetChanged()
     }
 
@@ -244,7 +263,7 @@ class TranslatedWordAdapter(private val presenter: WordsPresenter) : RecyclerVie
 
             itemView.translationLabel.text = wordCard.translation
             viewGroup.setOnClickListener {
-                presenter.createOrEditWordCard(wordCard.catchWordSpellings, wordCard.homonymDiscriminator)
+                presenter.startWordCardActivity(wordCard.catchWordSpellings, wordCard.homonymDiscriminator)
             }
             viewGroup.setOnLongClickListener {
                 Dialogs.newDialogYesNo(viewGroup.context,
