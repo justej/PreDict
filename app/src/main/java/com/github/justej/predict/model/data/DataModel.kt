@@ -12,7 +12,9 @@ data class WordCard(
         val tags: List<String>,
         val examples: String,
         val audio: List<Audio>,
-        val pictures: List<Picture>) : Parcelable {
+        val pictures: List<Picture>,
+        val status: TrainingStatus) : Parcelable {
+
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readString() ?: "",
@@ -22,7 +24,8 @@ data class WordCard(
             parcel.createStringArrayList() ?: listOf(),
             parcel.readString() ?: "",
             readListOf<Audio>(parcel),
-            readListOf<Picture>(parcel))
+            readListOf<Picture>(parcel),
+            TrainingStatus.createFromParcel(parcel))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(homonymDiscriminator)
@@ -32,6 +35,7 @@ data class WordCard(
         parcel.writeString(notes)
         parcel.writeStringList(tags)
         parcel.writeString(examples)
+        status.writeToParcel(parcel, flags)
     }
 
     override fun describeContents(): Int {
@@ -48,7 +52,8 @@ data class WordCard(
                 emptyList(),
                 "",
                 emptyList(),
-                emptyList())
+                emptyList(),
+                TrainingStatus(0, 0, 0))
 
         private inline fun <reified T> readListOf(parcel: Parcel): List<T> {
             val list = ArrayList<T>()
@@ -91,3 +96,47 @@ class Audio(private val id: Int,
     }
 
 }
+
+
+data class TrainingStatus(private val findTranslation: Byte,
+                          private val findWord: Byte,
+                          private val spellWord: Byte) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+            parcel.readByte(),
+            parcel.readByte(),
+            parcel.readByte())
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeByte(findTranslation)
+        parcel.writeByte(findWord)
+        parcel.writeByte(spellWord)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<TrainingStatus> {
+
+        override fun createFromParcel(parcel: Parcel): TrainingStatus {
+            return TrainingStatus(parcel)
+        }
+
+        override fun newArray(size: Int): Array<TrainingStatus?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+}
+
+
+enum class TrainingType {
+    FIND_TRANSLATION_GIVEN_WORD,
+    FIND_WORD_GIVEN_TRANSLATION,
+    SPELL_WORD_GIVEN_TRANSLATION,
+    FIND_WORD_GIVEN_PRONOUNCE
+}
+
+
+data class TrainingResult(val trainingType: TrainingType, val timestamp: Long, val result: Boolean)

@@ -151,7 +151,8 @@ class WordCardActivity : AppCompatActivity() {
                 tmpCard.tags,
                 tmpCard.examples,
                 tmpCard.audio,
-                tmpCard.pictures)
+                tmpCard.pictures,
+                tmpCard.status)
         showWordCard(originalWordCard)
     }
 
@@ -249,7 +250,8 @@ class WordCardActivity : AppCompatActivity() {
                         .map { it.trim() },
                 StringUtils.normalize(examplesEdit.text),
                 toListOfAudios(audioEdit.text),
-                toListOfPictures(picturesEdit.text))
+                toListOfPictures(picturesEdit.text),
+                originalWordCard.status)
     }
 
     private fun collapseEditTextToLabel(label: TextView, edit: TextView) {

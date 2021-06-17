@@ -3,6 +3,7 @@ package com.github.justej.predict.activities
 import android.app.Activity
 import android.util.Log
 import com.github.justej.predict.model.data.TrainWordSubset
+import com.github.justej.predict.model.data.TrainingType
 import com.github.justej.predict.model.data.WordCard
 import com.github.justej.predict.model.db.Persister
 import java.util.*
@@ -12,20 +13,24 @@ class TrainWordsPresenter(private val ui: Activity) {
 
     private val persister = Persister(ui)
     private lateinit var wordTrainer: WordTrainer
+    private lateinit var evaluator: Evaluator
 
-    fun initTraining(wordsSubset: TrainWordSubset, wordsCount: Int): WordCard? {
+    fun initTraining(wordsSubset: TrainWordSubset, wordsCount: Int, trainingType: TrainingType): WordCard? {
         // TODO: use wordsSubset and wordsCount
         if (wordsCount == 0) {
             // Get all words
         }
 
-        val wordsToTrain = LinkedList(persister.getWordCardByWordLike(""))
+        val wordsToTrain = persister.getWordCardByWordLike("")
         wordTrainer = WordTrainer(wordsToTrain)
+        evaluator = Evaluator(wordTrainer, trainingType)
         return wordTrainer.trainWord()
     }
 
     fun isCorrectAnswer(answer: String): Boolean {
         val isCorrect = wordTrainer.checkWord(answer)
+
+        val newStatus = evaluator.updateStatus(isCorrect)
 
         if (isCorrect) {
             wordTrainer.updateTrainWord()
@@ -42,11 +47,25 @@ class TrainWordsPresenter(private val ui: Activity) {
 
 }
 
-class WordTrainer(private val trainWordCards: LinkedList<WordCard>) {
+
+class Evaluator(private val wordTrainer: WordTrainer,
+                private val trainingType: TrainingType) {
+
+    fun updateStatus(isCorrect: Boolean): Int {
+        val wordCard = wordTrainer.trainWord()
+        // TODO: store statistics, calculate new status based on the word's history
+        return 0  // TODO: use real status
+    }
+
+}
+
+
+class WordTrainer(trainWordCards: List<WordCard>) {
 
     private val TAG = "---WordTrainer"
+    private val trainWordCards = LinkedList(trainWordCards)
     private val initialWordCount = trainWordCards.size
-    private var currentWordCard = nextWord(trainWordCards)
+    private var currentWordCard = nextWord(this.trainWordCards)
 
     fun checkWord(answer: String): Boolean {
         val trainWordCard = currentWordCard
@@ -55,7 +74,7 @@ class WordTrainer(private val trainWordCards: LinkedList<WordCard>) {
             return false
         }
 
-        return trainWordCard.catchWordSpellings.split("\n").any { answer.toLowerCase() == it.toLowerCase() }
+        return trainWordCard.catchWordSpellings.split("\n").any { answer.toLowerCase(Locale.getDefault()) == it.toLowerCase(Locale.getDefault()) }
     }
 
     fun updateTrainWord() {
@@ -90,7 +109,7 @@ class WordTrainer(private val trainWordCards: LinkedList<WordCard>) {
                         }
                     }
 
-                    if (notMatchingSymbolIdx == spellingVariant.length ) {
+                    if (notMatchingSymbolIdx == spellingVariant.length) {
                         return spellingVariant
                     }
 
@@ -103,8 +122,7 @@ class WordTrainer(private val trainWordCards: LinkedList<WordCard>) {
 
                     return@map hint
                 }
-                .sortedByDescending { it.length } // the longest hint
-                .first()
+                .maxBy { it.length }!! // the longest hint
     }
 
     fun progress() = 100 * (initialWordCount - trainWordCards.size) / initialWordCount

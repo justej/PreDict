@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.room.*
 import com.github.justej.predict.model.data.Audio
 import com.github.justej.predict.model.data.Picture
+import com.github.justej.predict.model.data.TrainingStatus
 import com.github.justej.predict.model.data.WordCard
 import java.util.*
 
@@ -12,16 +13,17 @@ private const val TAG = "WordsDb"
 /**
  * How it works:
  *
- * word ----------------->|-> wordCardId -|-> transcription, translation, notes, examples
+ * word ----------------->|-> wordCardId -|-> transcription, translation, notes, examples, trainingStatus
  * homonymDiscriminator ->|               |-> tagId -> tags
  *                                        |-> resourceId -> resources
+ *                                        |-> wordId, timestamp -> trainResult
  *
  *
  * For example:
  *
  * ("wrap", "noun") -> 13 -> ([ræp], "упаковка", "", "bubble wrap")
  *
- * ("color", "") --> 42 -|-> ([ˈkʌlər], "цвет", "", "the color of the sky")
+ * ("color", "") --> 42 -|-> ([ˈkʌlə], "цвет", "", "the color of the sky")
  * ("colour", "") -> 42 -|
  */
 
@@ -147,7 +149,19 @@ abstract class WordDao {
                             .map { Audio(it.id, it.resource) }
                     val pictures = getResourcesByCardId(card.id, ResourceType.PICTURE.value)
                             .map { Picture(it.id, it.resource) }
-                    WordCard(spellingVariants, homonymDiscriminator, card.transcription, card.translation, card.notes, tags, card.examples, audios, pictures)
+                    val status = getTrainingStatus(card.id)
+                    WordCard(
+                            spellingVariants,
+                            homonymDiscriminator,
+                            card.transcription,
+                            card.translation,
+                            card.notes,
+                            tags,
+                            card.examples,
+                            audios,
+                            pictures,
+                            TrainingStatus(status.findTranslation, status.findWord, status.spellWord)
+                    )
                 }
                 .filterNotNull()
                 .sortedWith(wordCardComparator)
@@ -240,6 +254,16 @@ abstract class WordDao {
         FROM RESOURCES r, RESOURCES_MAP rm
         WHERE r.ID = rm.CARD_ID AND rm.CARD_ID = :cardId AND r.TYPE = :type""")
     abstract fun getResourcesByCardId(cardId: Int, type: Int): List<ResourceDto>
+
+    @Query("""SELECT ts.*
+        FROM TRAINING_STATUS ts
+        WHERE ts.WORD_ID = :cardId""")
+    abstract fun getTrainingStatus(cardId: Int): TrainingStatusDto
+
+    @Query("""SELECT tr.*
+        FROM TRAINING_RESULTS tr
+        WHERE tr.WORD_ID = :cardId""")
+    abstract fun getTrainingResults(cardId: Int): List<TrainingResultDto>
 
     @Query("""INSERT
         INTO WORD_CARDS (TRANSCRIPTION, TRANSLATION, NOTES, EXAMPLES)
@@ -347,3 +371,29 @@ data class ResourceDto(
 data class ResourceMap(
         @ColumnInfo(name = "RESOURCE_ID", index = true) val resourceId: Int,
         @ColumnInfo(name = "CARD_ID", index = true) val cardId: Int)
+
+
+@Entity(tableName = "TRAINING_STATUS",
+        primaryKeys = ["WORD_ID"],
+        foreignKeys = [
+            ForeignKey(entity = WordCardDto::class,
+                    parentColumns = ["ID"],
+                    childColumns = ["WORD_ID"])])
+data class TrainingStatusDto(
+        @ColumnInfo(name = "WORD_ID", index = true) val wordId: Int,
+        @ColumnInfo(name = "FIND_TRANSLATION", index = true) val findTranslation: Byte,
+        @ColumnInfo(name = "FIND_WORD") val findWord: Byte,
+        @ColumnInfo(name = "SPELL_WORD") val spellWord: Byte)
+
+
+@Entity(tableName = "TRAINING_RESULTS",
+        primaryKeys = ["WORD_ID", "TIMESTAMP", "TRAINING_TYPE"],
+        foreignKeys = [
+            ForeignKey(entity = WordCardDto::class,
+                    parentColumns = ["ID"],
+                    childColumns = ["WORD_ID"])])
+data class TrainingResultDto(
+        @ColumnInfo(name = "WORD_ID", index = true) val wordId: Int,
+        @ColumnInfo(name = "TIMESTAMP", index = true) val timestamp: Long,
+        @ColumnInfo(name = "TRAINING_TYPE") val trainingType: Byte,
+        @ColumnInfo(name = "TRAINING_RESULT") val trainingResult: Boolean)

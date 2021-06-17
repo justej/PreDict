@@ -5,18 +5,19 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.justej.predict.R
-import com.github.justej.predict.model.data.PARAM_TRAIN_WORD_COUNT
-import com.github.justej.predict.model.data.PARAM_TRAIN_WORD_SUBSET
-import com.github.justej.predict.model.data.TrainWordSubset
+import com.github.justej.predict.model.data.*
 import kotlinx.android.synthetic.main.activity_train_words.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.train_common.*
+
+private const val TAG = "TrainWordActivity"
 
 class TrainWordsActivity : AppCompatActivity() {
 
@@ -35,9 +36,17 @@ class TrainWordsActivity : AppCompatActivity() {
 //        settingsLayout.visibility = View.GONE
 
         val extras = intent?.extras
-        val wordsCount = extras?.getInt(PARAM_TRAIN_WORD_COUNT) ?: 0
-        val wordsSubset = extras?.get(PARAM_TRAIN_WORD_SUBSET) as TrainWordSubset
-        val wordCard = presenter.initTraining(wordsSubset, wordsCount)
+
+        if (extras == null) {
+            Log.e(TAG, "Intent doesn't contain any extras. Can't proceed.")
+            return
+        }
+
+        val wordsCount = extras.getInt(PARAM_TRAIN_WORD_COUNT)
+        val wordsSubset = extras.get(PARAM_TRAIN_WORD_SUBSET) as TrainWordSubset
+        val trainingType = TrainingType.valueOf(extras.get(PARAM_TRAIN_TYPE) as String)
+
+        val wordCard = presenter.initTraining(wordsSubset, wordsCount, trainingType)
 
         title = title()
         questionTextLabel.text = wordCard?.translation ?: "No words found, sorry"

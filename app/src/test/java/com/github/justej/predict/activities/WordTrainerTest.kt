@@ -1,16 +1,18 @@
 package com.github.justej.predict.activities
 
+import com.github.justej.predict.model.data.TrainingStatus
 import com.github.justej.predict.model.data.WordCard
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
-private val WORD_CARD_AAA_BBB_CCC = WordCard("aaa\nbbb\nccc", "", "", "", "", listOf(), "", listOf(), listOf())
-private val WORD_CARD_COLOR = WordCard("color\ncolour", "", "'kʌlə", "цвет", "", listOf(), "", listOf(), listOf())
-private val WORD_CARD_ANALYZE = WordCard("analyze\nanalyse", "", "'æn(ə)laɪz", "анализировать", "", listOf(), "", listOf(), listOf())
-private val WORD_CARD_ONE = WordCard("one", "", "wʌn", "один", "", listOf(), "", listOf(), listOf())
-private val WORD_CARD_TWO = WordCard("two", "", "tuː", "два", "", listOf(), "", listOf(), listOf())
-private val WORD_CARD_THREE = WordCard("three", "", "θriː", "три", "", listOf(), "", listOf(), listOf())
+private val TRAINING_STATUS = TrainingStatus(0, 0, 0)
+private val WORD_CARD_AAA_BBB_CCC = WordCard("aaa\nbbb\nccc", "", "", "", "", listOf(), "", listOf(), listOf(), TRAINING_STATUS)
+private val WORD_CARD_COLOR = WordCard("color\ncolour", "", "'kʌlə", "цвет", "", listOf(), "", listOf(), listOf(), TRAINING_STATUS)
+private val WORD_CARD_ANALYZE = WordCard("analyze\nanalyse", "", "'æn(ə)laɪz", "анализировать", "", listOf(), "", listOf(), listOf(), TRAINING_STATUS)
+private val WORD_CARD_ONE = WordCard("one", "", "wʌn", "один", "", listOf(), "", listOf(), listOf(), TRAINING_STATUS)
+private val WORD_CARD_TWO = WordCard("two", "", "tuː", "два", "", listOf(), "", listOf(), listOf(), TRAINING_STATUS)
+private val WORD_CARD_THREE = WordCard("three", "", "θriː", "три", "", listOf(), "", listOf(), listOf(), TRAINING_STATUS)
 
 class WordTrainerTest {
 
